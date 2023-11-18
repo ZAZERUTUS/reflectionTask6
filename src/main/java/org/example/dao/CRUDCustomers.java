@@ -37,7 +37,9 @@ public class CRUDCustomers extends DbConnector {
             resultSet.next();
             customer = new Customer(resultSet.getInt(1),
                     resultSet.getString(2),
-                    resultSet.getString(3));
+                    resultSet.getString(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5));
         }
         closeDbConnection();
         return customer;

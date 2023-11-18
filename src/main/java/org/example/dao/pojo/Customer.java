@@ -12,5 +12,7 @@ public class Customer {
     final Integer id;
     public String name;
     public String lastName;
+    public String secondName;
+    public String numDocument;
 
 }

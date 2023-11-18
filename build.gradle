@@ -10,12 +10,6 @@ repositories {
     mavenCentral()
 }
 
-//tasks.jar {
-//    manifest {
-//        attributes["Main-Class"] = "org.example.Main"
-//    }
-//}
-
 jar {
     manifest {
         attributes "Main-Class": "org.example.Main"
