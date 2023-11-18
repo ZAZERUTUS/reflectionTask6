@@ -1,0 +1,1 @@
+. /etc/environment && sdk use java 17.0.7-amzn && ./gradlew shadowJar && java -classpath /tests/libs/postgresql-42.6.0.jar:/tests/build/libs/reflectionTask6-0.1.0-all.jar org.example.Main
