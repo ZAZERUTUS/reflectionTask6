@@ -1,0 +1,7 @@
+nameDb: test
+adminPassword: admin
+adminUser: admin
+hostDb: postgres_container
+portDb: 5432
+typeCache: LRU
+capacity: 2
