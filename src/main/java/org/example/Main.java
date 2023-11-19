@@ -8,6 +8,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+
+    /**
+     * Для добавления новых пользователей и обновления пример json
+     * {"id":2,"name":"Милана","lastName":"Гусева","secondName":"Андреевич","numDocument":"HB1234567"}
+     * @param args
+     */
     public static void main(String[] args) {
 
         ServiceImpl service = new ServiceImpl();
@@ -24,7 +30,7 @@ public class Main {
                     System.out.println(service.getAll());
                     break;
                 case 2:
-                    System.out.println(new GsonBuilder().create().toJson(service.getById(getIdCustomer())));
+                    System.out.println(getIdCustomer());
                     break;
                 case 3:
                     customer = getCustomerFromJsonString();

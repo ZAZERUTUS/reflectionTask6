@@ -16,6 +16,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Класс для работы с {@link Customer}
+ */
 public class CRUDCustomer extends DbConnector {
     private static final Logger logger = LoggerFactory.getLogger(CRUDCustomer.class);
 
