@@ -24,7 +24,7 @@ public class CacheLFU<K, V> implements Cacheable {
     }
 
     @Override
-    public Object get(Object key) {
+    public V get(Object key) {
         if (cache.containsKey(key)) {
             updateFrequency((K) key);
         }
@@ -47,8 +47,8 @@ public class CacheLFU<K, V> implements Cacheable {
 
     @Override
     public void remove(Object key) {
-        cache.clear();
-        frequencies.clear();
+        cache.remove(key);
+        frequencies.remove(key);
     }
 
     @Override
