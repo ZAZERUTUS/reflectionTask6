@@ -24,14 +24,19 @@ public class CacheAspect {
     @Pointcut("@annotation(org.example.proxy.annotation.GetCustomer)")
     public void findByIdCall() {}
 
+    @Pointcut("@annotation(org.example.proxy.annotation.AddCustomer)")
+    public void addNewCustomer() {}
+
+    @Pointcut("@annotation(org.example.proxy.annotation.DeleteCustomer)")
+    public void deleteCustomer() {}
+
     @Around(value = "findByIdCall()")
     public Customer cacheFindById(ProceedingJoinPoint joinPoint) throws Throwable {
-        logger.info("Proxy work");
         Object[] args = joinPoint.getArgs();
         Integer id = (Integer) args[0];
 
         if (cache.get(id) != null) {
-            System.out.println("Using cache for ID: " + id);
+            logger.info("Using cache for getByID: " + id);
             return (Customer) cache.get(id);
         }
 
@@ -42,5 +47,36 @@ public class CacheAspect {
         }
 
         return (Customer) result;
+    }
+
+    @Around(value = "addNewCustomer()")
+    public int cacheAddNewCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object[] args = joinPoint.getArgs();
+        Customer customer = (Customer) args[0];
+
+        int result = (int) joinPoint.proceed();
+
+        if (result != 0) {
+            customer.setId(result);
+            cache.put(result, customer);
+            logger.info("Add in cache new customer: " + customer);
+        }
+
+        return result;
+    }
+
+    @Around(value = "deleteCustomer()")
+    public boolean cacheDeleteCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object[] args = joinPoint.getArgs();
+        int id = (int) args[0];
+
+        boolean result = (boolean) joinPoint.proceed();
+
+        if (result) {
+            cache.remove(id);
+            logger.info("Delete customer from cache with id: " + id);
+        }
+
+        return result;
     }
 }

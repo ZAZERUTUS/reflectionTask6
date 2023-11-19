@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.dao.pojo.Customer;
 import org.example.proxy.CacheAspect;
+import org.example.service.ServiceImpl;
 
 import java.util.List;
 
@@ -10,19 +11,20 @@ import static org.example.dao.CRUDCustomer.getCustomerById;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        ServiceImpl service = new ServiceImpl();
         List<Customer> customers = getAllCustomers();
         System.out.println("Len - " + customers.size());
-        System.out.println("-------1");
-        Customer customer1 = getCustomerById(1);
+        Customer customer1 = service.getById(1);
         System.out.println("-------" + customer1);
-        System.out.println("-------2");
-        Customer customer2 = getCustomerById(1);
+        Customer customer2 = service.getById(1);
         System.out.println("-------" + customer2);
-        customer2 = getCustomerById(2);
-        customer2 = getCustomerById(3);
-        customer2 = getCustomerById(1);
-
+        customer2 = service.getById(2);
+        customer2 = service.getById(3);
+//        customer2 = service.getById(1);
+        service.save(customer2);
+        customer2 = service.getById(15);
+        customer2 = service.getById(15);
+        service.delete(15);
 
     }
 }
