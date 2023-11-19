@@ -1,4 +1,8 @@
-package org.example.cash;
+package org.example.cash.impl;
+
+import org.example.cash.Cacheable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -6,11 +10,14 @@ import java.util.Map;
 
 public class CacheLFU<K, V> implements Cacheable {
 
+    private static final Logger logger = LoggerFactory.getLogger(CacheLFU.class);
+
     private final int capacity;
     private final Map<K, V> cache;
     private final Map<K, Integer> frequencies;
 
     public CacheLFU(int capacity) {
+        logger.info("Setup class");
         this.capacity = capacity;
         this.cache = new LinkedHashMap<>(capacity, 0.75f, true);
         this.frequencies = new HashMap<>();
@@ -21,7 +28,7 @@ public class CacheLFU<K, V> implements Cacheable {
         if (cache.containsKey(key)) {
             updateFrequency((K) key);
         }
-        return cache.get(key);
+        return cache.getOrDefault(key, null);
     }
 
     @Override
@@ -46,7 +53,8 @@ public class CacheLFU<K, V> implements Cacheable {
 
     @Override
     public void clear() {
-
+        cache.clear();
+        frequencies.clear();
     }
 
     @Override

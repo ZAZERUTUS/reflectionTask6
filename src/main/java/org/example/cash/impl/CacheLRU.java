@@ -1,4 +1,6 @@
-package org.example.cash;
+package org.example.cash.impl;
+
+import org.example.cash.Cacheable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,7 +45,7 @@ public class CacheLRU<K, V> implements Cacheable {
 
     @Override
     public int size() {
-        return 0;
+        return cache.size();
     }
 
     private void evictLRU() {
