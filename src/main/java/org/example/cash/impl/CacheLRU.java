@@ -16,7 +16,7 @@ public class CacheLRU<K, V> implements Cacheable {
     }
 
     @Override
-    public Object get(Object key) {
+    public V get(Object key) {
         return  cache.getOrDefault(key, null);
     }
 
