@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.example.cash.Cacheable;
-import org.example.cash.impl.CacheLFU;
 import org.example.dao.pojo.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,9 @@ public class CacheAspect {
 
     @Pointcut("@annotation(org.example.proxy.annotation.DeleteCustomer)")
     public void deleteCustomer() {}
+
+    @Pointcut("@annotation(org.example.proxy.annotation.UpdCustomer)")
+    public void updateCustomer() {}
 
     @Around(value = "findByIdCall()")
     public Customer cacheFindById(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -75,6 +77,21 @@ public class CacheAspect {
         if (result) {
             cache.remove(id);
             logger.info("Delete customer from cache with id: " + id);
+        }
+
+        return result;
+    }
+
+    @Around(value = "updateCustomer()")
+    public boolean cacheUpdateCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object[] args = joinPoint.getArgs();
+        Customer customer = (Customer) args[0];
+
+        boolean result = (boolean) joinPoint.proceed();
+
+        if (result) {
+            cache.put(customer.id, customer);
+            logger.info("Update customer in cache: " + customer);
         }
 
         return result;
