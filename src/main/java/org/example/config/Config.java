@@ -11,6 +11,6 @@ public class Config {
     protected String adminUser;
     protected String hostDb;
     protected int portDb;
-    protected double percent;
-    protected int periodVerifyPercentMls;
+    protected String typeCache;
+    protected int capacity;
 }

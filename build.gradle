@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id "com.github.johnrengelman.shadow" version "8.1.1"
+//    id 'application'
+    id 'io.freefair.aspectj.post-compile-weaving' version '8.4'
 }
 
 group 'org.example'
@@ -9,12 +11,6 @@ version '0.1.0'
 repositories {
     mavenCentral()
 }
-
-//tasks.jar {
-//    manifest {
-//        attributes["Main-Class"] = "org.example.Main"
-//    }
-//}
 
 jar {
     manifest {
@@ -43,9 +39,11 @@ dependencies {
     implementation("log4j:log4j:1.2.17")
     shadow("log4j:log4j:1.2.17")
 
-    implementation("org.apache.logging.log4j:log4j-core:2.17.1")
-    implementation("org.apache.logging.log4j:log4j-api:2.17.1")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.1")
+    implementation('org.apache.logging.log4j:log4j-core:2.20.0')
+    implementation('org.apache.logging.log4j:log4j-api:2.20.0')
+    implementation('org.apache.logging.log4j:log4j-slf4j-impl:2.20.0')
+
+    implementation 'org.aspectj:aspectjrt:1.9.20.1'
 }
 
 test {
