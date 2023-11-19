@@ -38,3 +38,8 @@
 3. После зайти в запущенный контейнер bank_app (`docker ps` -> `docker exec -it xxx bash`)
    <br>Где xxx - CONTAINER ID (dockerpg-task_app) из 1 команды в текущем пункте
 4. В терминале контейнера выполнить `bash startApp.sh` - Консольное приложение запущенно и готово к использованию
+
+
+## Параметры конфиг файла [config](./config.yml)
+- typeCache: LRU или LFU
+- capacity: целое число ёмкости кэша
