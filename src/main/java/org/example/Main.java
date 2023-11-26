@@ -2,10 +2,18 @@ package org.example;
 
 import com.google.gson.GsonBuilder;
 import org.example.dao.pojo.Customer;
+import org.example.printer.DockMaker;
+import org.example.printer.TypePrinter;
+import org.example.printer.impl.PdfMakerClevertec;
 import org.example.service.ServiceImpl;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+
+import static org.example.printer.PrinterFactory.createDockMakerByType;
 
 public class Main {
 
@@ -16,6 +24,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        DockMaker<Customer> dockMaker = createDockMakerByType(TypePrinter.PDF);
         ServiceImpl service = new ServiceImpl();
         boolean trigger = true;
         while (trigger) {
@@ -27,10 +36,14 @@ public class Main {
                     trigger = false;
                     break;
                 case 1:
-                    System.out.println(service.getAll());
+                    List<Customer> localList = service.getAll();
+                    System.out.println(localList);
+                    dockMaker.generateDock("All customers", localList);
                     break;
                 case 2:
-                    System.out.println(getIdCustomer());
+                    Customer customerLocal = service.getById(getIdCustomer());
+                    System.out.println(customerLocal);
+                    dockMaker.generateDock("Get customer by id", Collections.singletonList(customerLocal));
                     break;
                 case 3:
                     customer = getCustomerFromJsonString();
