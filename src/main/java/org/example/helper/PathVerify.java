@@ -1,24 +1,43 @@
 package org.example.helper;
 
 import java.io.File;
-import java.nio.file.Path;
 
 public class PathVerify {
 
-//    public static void createDirectory(String directoryPath) {
-//        File directory = new File(directoryPath);
-//        if (System.getenv(""))
-//
-//        // Проверяем, существует ли папка
-//        if (!directory.exists()) {
-//            // Если не существует, создаем
-//            if (directory.mkdirs()) {
-//                System.out.println("Папка создана: " + directory.getAbsolutePath());
-//            } else {
-//                System.err.println("Не удалось создать папку: " + directory.getAbsolutePath());
-//            }
-//        } else {
-//            System.out.println("Папка уже существует: " + directory.getAbsolutePath());
-//        }
-//    }
+    public static String getPathForSaveDoc(String nameFolder) {
+        return createDocFolder(nameFolder);
+    }
+
+    /**
+     * Указывать по умолчанию как разделитель вложенности unix разделитель - '/'
+     * @param nameFolder - вложенность относительно рабочей директории
+     * @return
+     */
+    private static String createDocFolder(String nameFolder) {
+        String[] folders = nameFolder.split("/");
+        String newPath = updatePathFosOS(getCurrentPath());
+
+        for (String fold: folders) {
+            File folder = new File(updatePathFosOS(newPath + "/" + fold));
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            newPath = folder.getPath();
+        }
+        return updatePathFosOS(newPath + "/");
+    }
+
+    public static String getCurrentPath() {
+        String path = System.getProperty("user.dir");
+        return path;
+    }
+
+    public static String updatePathFosOS(String path) {
+        String osName = System.getProperty("os.name");
+        if (osName.contains("Wind")) {
+            return path.replace("/", "\\");
+        } else {
+            return path.replace("\\", "/");
+        }
+    }
 }

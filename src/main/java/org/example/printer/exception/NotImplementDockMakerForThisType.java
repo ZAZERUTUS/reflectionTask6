@@ -1,4 +1,4 @@
-package org.example.printer;
+package org.example.printer.exception;
 
 public class NotImplementDockMakerForThisType extends IllegalArgumentException {
 

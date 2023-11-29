@@ -1,6 +1,7 @@
 package org.example.printer;
 
 import org.example.dao.pojo.Customer;
+import org.example.printer.exception.NotImplementDockMakerForThisType;
 import org.example.printer.impl.PdfMakerClevertec;
 
 public class PrinterFactory {
