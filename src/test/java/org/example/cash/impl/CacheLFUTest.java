@@ -9,7 +9,7 @@ class CacheLFUTest {
 
 
     @Test
-    void getExistingKey_shouldReturnCachedValue() {
+    public void getExistingKey_shouldReturnCachedValue() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
         cache.put("key1", "value1");
@@ -23,7 +23,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void getOldKey_shouldReturnNull() {
+    public void getOldKey_shouldReturnNull() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
         cache.put("key1", "value1");
@@ -38,7 +38,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void putNewItem_shouldAddToCache() {
+    public void putNewItem_shouldAddToCache() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
         cache.put("key1", "value1");
@@ -51,7 +51,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void putNewItemOverCapacity_shouldEvictLFUItem() {
+    public void putNewItemOverCapacity_shouldEvictLFUItem() {
         //Given
         int expectedCap = 2;
         CacheLFU<String, String> cache = new CacheLFU<>(expectedCap);
@@ -67,7 +67,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void remove_shouldReduceCache() {
+    public void remove_shouldReduceCache() {
         //Given
         int expectedCap = 1;
         CacheLFU<String, String> cache = new CacheLFU<>(2);
@@ -83,7 +83,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void remove_shouldRemoveFromCache() {
+    public void remove_shouldRemoveFromCache() {
         //Given
         String expectedCap = null;
         CacheLFU<String, String> cache = new CacheLFU<>(2);
@@ -99,7 +99,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void clear_shouldClearCache() {
+    public void clear_shouldClearCache() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
         cache.put("key1", "value1");
@@ -114,7 +114,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void size_shouldReturnCurrentCacheSize() {
+    public void size_shouldReturnCurrentCacheSize() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
 
@@ -127,7 +127,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void size_shouldReturnCurrentCacheSizeIfAddMoreCapacity() {
+    public void size_shouldReturnCurrentCacheSizeIfAddMoreCapacity() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
 
@@ -141,7 +141,7 @@ class CacheLFUTest {
     }
 
     @Test
-    void evictLFU_shouldRemoveLeastFrequentlyUsedItem() {
+    public void evictLFU_shouldRemoveLeastFrequentlyUsedItem() {
         //Given
         CacheLFU<String, String> cache = new CacheLFU<>(2);
         cache.put("key1", "value1");

@@ -2,10 +2,15 @@ package org.example;
 
 import com.google.gson.GsonBuilder;
 import org.example.dao.pojo.Customer;
+import org.example.printer.DockMaker;
+import org.example.printer.TypePrinter;
 import org.example.service.ServiceImpl;
-
+import java.util.Collections;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+
+import static org.example.printer.PrinterFactory.createDockMakerByType;
 
 public class Main {
 
@@ -16,38 +21,62 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        DockMaker<Customer> pdfMaker = createDockMakerByType(TypePrinter.PDF);
+
         ServiceImpl service = new ServiceImpl();
         boolean trigger = true;
         while (trigger) {
             Integer selectPoint = getNumMethod();
             Customer customer;
+            int id;
 
             switch (selectPoint) {
                 case 0:
                     trigger = false;
                     break;
                 case 1:
-                    System.out.println(service.getAll());
+                    List<Customer> localList = service.getAll();
+                    System.out.println(localList);
+                    pdfMaker.generateDock("All customers", localList);
                     break;
                 case 2:
-                    System.out.println(getIdCustomer());
+                    customer = service.getById(getIdCustomer());
+                    System.out.println(customer);
+                    pdfMaker.generateDock("Get customer by id", Collections.singletonList(customer));
                     break;
                 case 3:
                     customer = getCustomerFromJsonString();
 
-                    System.out.println(customer != null ?
-                            service.save(customer) :
-                            "Не корректный json");
+                    if (customer != null) {
+                        id = service.save(customer); //saved customer
+                        pdfMaker.generateDock("Add new customer",
+                                Collections.singletonList(service.getById(id)));
+                        System.out.println(customer);
+                    } else {
+                        System.out.println("Не корректный json");
+                    }
                     break;
                 case 4:
                     customer = getCustomerFromJsonString();
 
-                    System.out.println(customer != null ?
-                            "Пользователь обновлён - " + service.update(customer) :
-                            "Не корректный json");
+                    if (customer != null) {
+                        id = service.update(customer);
+                        pdfMaker.generateDock("Update customer",
+                                Collections.singletonList(service.getById(id)));
+                        System.out.println("Пользователь обновлён - " + customer);
+                    } else {
+                        System.out.println("Не корректный json");
+                    }
+
                     break;
                 case 5:
-                    System.out.println("Пользователь удалён - " + service.delete(getIdCustomer()) != null);
+                    id = getIdCustomer();
+                    customer = service.getById(id);
+                    if (service.delete(id) != 0) {
+                        System.out.println("Пользователь удалён");
+                        pdfMaker.generateDock("Delete customer",
+                                Collections.singletonList(customer));
+                    }
                     break;
             }
         }

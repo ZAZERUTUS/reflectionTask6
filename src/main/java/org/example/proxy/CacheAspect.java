@@ -68,13 +68,13 @@ public class CacheAspect {
     }
 
     @Around(value = "deleteCustomer()")
-    public boolean cacheDeleteCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
+    public int cacheDeleteCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         int id = (int) args[0];
 
-        boolean result = (boolean) joinPoint.proceed();
+        int result = (int) joinPoint.proceed();
 
-        if (result) {
+        if (result != 0) {
             cache.remove(id);
             logger.info("Delete customer from cache with id: " + id);
         }
@@ -83,13 +83,13 @@ public class CacheAspect {
     }
 
     @Around(value = "updateCustomer()")
-    public boolean cacheUpdateCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
+    public int cacheUpdateCustomer(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Customer customer = (Customer) args[0];
 
-        boolean result = (boolean) joinPoint.proceed();
+        int result = (int) joinPoint.proceed();
 
-        if (result) {
+        if (result != 0) {
             cache.put(customer.id, customer);
             logger.info("Update customer in cache: " + customer);
         }
