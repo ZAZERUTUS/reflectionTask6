@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ConfigHandler {
-    public static final Path configPath = Paths.get("./config.yml");
+    public static final Path configPath = Paths.get("/tests/config.yml");
 
     private static ConfigHandler configHandler;
 

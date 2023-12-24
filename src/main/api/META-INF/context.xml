@@ -1,0 +1,14 @@
+<!-- context.xml -->
+<Context>
+    <Resource name="jdbc/your-datasource-name" auth="Container"
+              type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://postgres_container:5445/test"
+              username="admin" password="admin"
+              maxTotal="20" maxIdle="10" maxWaitMillis="-1"/>
+
+    <Resource name="jdbc/your-datasource-name" auth="Container"
+              type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://postgres_container:5432/test"
+              username="admin" password="admin"
+              maxTotal="20" maxIdle="10" maxWaitMillis="-1"/>
+</Context>

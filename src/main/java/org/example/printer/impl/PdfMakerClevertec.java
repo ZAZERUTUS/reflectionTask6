@@ -15,18 +15,25 @@ import org.example.printer.impl.pageivent.MyPageEvents;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.example.helper.PathVerify.getPathForSaveDoc;
 
 public class PdfMakerClevertec implements DockMaker<Customer> {
 
     private static final String EXTENSION_FOR_SAVE = ".pdf";
-    public String outputPdfPath = getPathForSaveDoc("pdf");
-    public static final String WATERMARK_PDF = System.getProperty("user.dir") + "/src/main/resources/watermark/ClevertecWatermark.pdf";
+    public String outputDockPath = getPathForSaveDoc("pdf");
+    private static String watermarkPathPdf = System.getProperty("user.dir") + "/watermark/ClevertecWatermark.pdf";
+
+    private static String fontPath = System.getProperty("user.dir") + "/font/robo.ttf";
 
     @Override
     public String generateDock(String fileNamePart, List<Customer> content) {
@@ -34,25 +41,34 @@ public class PdfMakerClevertec implements DockMaker<Customer> {
         String fileName = getNameForPdf(fileNamePart);
         document.setMargins(30, 30, 150, 30);
         try {
+            Path filePath = Path.of(outputDockPath + fileName);
+
             PdfWriter writer = PdfWriter.getInstance(document,
-                    new FileOutputStream(outputPdfPath +
-                            fileName));
+                    new FileOutputStream(filePath.toString()));
             MyPageEvents events = new MyPageEvents();
             writer.setPageEvent(events);
             document.open();
 
-            // Заголовок файла
             Paragraph header = new Paragraph(fileNamePart.toUpperCase(), getTextRoboFont());
             header.setAlignment(Element.ALIGN_CENTER);
             header.setSpacingAfter(20f);
             document.add(header);
 
-            // Заполнение
             PdfPTable table = createTableHeader(Customer.class);
             insertInTable(table, content);
             document.add(table);
 
+            Set<PosixFilePermission> permissions = new HashSet<>();
+            permissions.add(PosixFilePermission.OWNER_READ);
+            permissions.add(PosixFilePermission.OWNER_WRITE);
+            permissions.add(PosixFilePermission.GROUP_READ);
+            permissions.add(PosixFilePermission.GROUP_WRITE);
+            permissions.add(PosixFilePermission.OTHERS_READ);
+            permissions.add(PosixFilePermission.OTHERS_WRITE);
+
             document.close();
+
+            Files.setPosixFilePermissions(filePath, permissions);
 
             System.out.println("PDF created successfully.");
             return fileName;
@@ -67,7 +83,24 @@ public class PdfMakerClevertec implements DockMaker<Customer> {
 
     @Override
     public void setCustomPathForSave(String relativePath) {
-        this.outputPdfPath = getPathForSaveDoc(relativePath);
+        this.outputDockPath = relativePath;
+    }
+
+    @Override
+    public String getCustomPathForSave() {
+        return outputDockPath;
+    }
+
+    public void setWatermarkPathPdf(String watermarkPath) {
+        watermarkPathPdf = watermarkPath;
+    }
+
+    public static String getWatermarkPathPdf() {
+        return watermarkPathPdf;
+    }
+
+    public void setFontPathPdf(String fontPath) {
+        PdfMakerClevertec.fontPath = fontPath;
     }
 
     private String getNameForPdf(String fileNamePart) {
@@ -104,8 +137,8 @@ public class PdfMakerClevertec implements DockMaker<Customer> {
 
     @SneakyThrows
     protected Font getTextRoboFont() {
-        BaseFont unicode = BaseFont.createFont(
-                System.getProperty("user.dir") + "/src/main/resources/font/robo.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont unicode = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
         Font font = new Font(unicode, 12);
         return font;
     }

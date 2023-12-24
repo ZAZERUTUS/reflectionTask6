@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,8 @@ public class CRUDCustomer extends DbConnector {
 
     protected static final String FORMAT_QUERY_GET_CUSTOMER_BY_ID = "SELECT * FROM test.customers where id = %s";
     protected static final String QUERY_GET_ALL_CUSTOMERS = "SELECT * FROM test.customers";
+    protected static final String FORMAT_QUERY_GET_ALL_CUSTOMERS_BY_PAGES = "SELECT * FROM test.customers ORDER BY id LIMIT %s OFFSET %s;";
+
     protected static final String FORMAT_QUERY_ADD_CUSTOMER = "INSERT INTO test.customers " +
             "(name, last_name, second_name, dock_num) " +
             "VALUES ('%s', '%s', '%s', '%s') RETURNING id;";
@@ -40,8 +43,18 @@ public class CRUDCustomer extends DbConnector {
 
     @SneakyThrows
     public static List<Customer> getAllCustomers() {
+        return getCustomersBySQL(QUERY_GET_ALL_CUSTOMERS);
+    }
+
+    @SneakyThrows
+    public static List<Customer> getAllCustomersByPages(Integer rows, Integer page) {
+        String sql = String.format(FORMAT_QUERY_GET_ALL_CUSTOMERS_BY_PAGES, rows, (page - 1) * rows);
+        return getCustomersBySQL(sql);
+    }
+
+    private static List<Customer> getCustomersBySQL(String sql) throws SQLException {
         Statement statement = getStatementPostgres();
-        ResultSet resultSet = getResultSetBySQLQuery(statement, QUERY_GET_ALL_CUSTOMERS);
+        ResultSet resultSet = getResultSetBySQLQuery(statement, sql);
         List<Customer> customers = new ArrayList<>();
         if (resultSet != null) {
             while (resultSet.next()) {

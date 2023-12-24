@@ -9,8 +9,10 @@ public class Config {
     protected String nameDb;
     protected String adminPassword;
     protected String adminUser;
+    protected String initDb;
     protected String hostDb;
     protected int portDb;
     protected String typeCache;
     protected int capacity;
+    protected int pageSize;
 }

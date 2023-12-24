@@ -12,7 +12,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.SneakyThrows;
 
-import static org.example.printer.impl.PdfMakerClevertec.WATERMARK_PDF;
+import static org.example.printer.impl.PdfMakerClevertec.getWatermarkPathPdf;
 
 public class MyPageEvents extends PdfPageEventHelper {
 
@@ -21,8 +21,7 @@ public class MyPageEvents extends PdfPageEventHelper {
     @Override
     @SneakyThrows
     public void onStartPage(PdfWriter writer, Document document) {
-        // Подложка
-        PdfReader pdfReader = new PdfReader(WATERMARK_PDF);
+        PdfReader pdfReader = new PdfReader(getWatermarkPathPdf());
         PdfImportedPage importedPage = writer.getImportedPage(pdfReader, 1);
         PdfContentByte contentByte = writer.getDirectContentUnder();
         contentByte.addTemplate(importedPage, 0, 0);
