@@ -5,6 +5,7 @@ import java.util.List;
 public interface DTOService<T> {
     T getById(int id);
     List<T> getAll();
+    List<T> getAll(Integer rows, Integer page);
     int save(T entity);
     int update(T entity);
     int delete(int id);

@@ -7,6 +7,7 @@ import java.util.List;
 import static org.example.dao.CRUDCustomer.addCustomer;
 import static org.example.dao.CRUDCustomer.deleteCustomer;
 import static org.example.dao.CRUDCustomer.getAllCustomers;
+import static org.example.dao.CRUDCustomer.getAllCustomersByPages;
 import static org.example.dao.CRUDCustomer.getCustomerById;
 import static org.example.dao.CRUDCustomer.updateCustomer;
 
@@ -22,6 +23,11 @@ public class ServiceImpl implements DTOService<Customer> {
     @Override
     public List<Customer> getAll() {
         return getAllCustomers();
+    }
+
+    @Override
+    public List<Customer> getAll(Integer rows, Integer page) {
+        return getAllCustomersByPages(rows, page);
     }
 
     @Override

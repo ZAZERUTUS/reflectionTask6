@@ -11,4 +11,6 @@ public interface DockMaker<T> {
      * @param newPath
      */
     void setCustomPathForSave(String newPath);
+
+    String getCustomPathForSave();
 }

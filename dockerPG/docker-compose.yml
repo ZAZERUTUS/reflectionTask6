@@ -2,50 +2,23 @@ version: "3.9"
 services:
   postgres:
     container_name: postgres_container
-    image: postgres:13.3
-    command:
-      - "postgres"
-      - "-c"
-      - "max_connections=50"
-      - "-c"
-      - "shared_buffers=1GB"
-      - "-c"
-      - "effective_cache_size=4GB"
-      - "-c"
-      - "work_mem=16MB"
-      - "-c"
-      - "maintenance_work_mem=512MB"
-      - "-c"
-      - "random_page_cost=1.1"
-      - "-c"
-      - "temp_file_limit=10GB"
-      - "-c"
-      - "log_min_duration_statement=200ms"
-      - "-c"
-      - "idle_in_transaction_session_timeout=10s"
-      - "-c"
-      - "lock_timeout=1s"
-      - "-c"
-      - "statement_timeout=60s"
-      - "-c"
-      - "shared_preload_libraries=pg_stat_statements"
-      - "-c"
-      - "pg_stat_statements.max=10000"
-      - "-c"
-      - "pg_stat_statements.track=all"
-    environment:
-      POSTGRES_DB: "test"
-      POSTGRES_USER: "admin"
-      POSTGRES_PASSWORD: "admin"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
-    volumes:
-      - ./initDbScr:/docker-entrypoint-initdb.d
-    #      - .:/var/lib/postgresql/data
+    build:
+      context: ..
+      dockerfile: DockerfilePG
     ports:
       - "5445:5432"
-
     networks:
       - postgres
+
+#  tomcat:
+#    image: tomcat:10.0.18-jdk17-openjdk-slim-buster
+#    ports:
+#      - "8088:8080"
+#    volumes:
+#      - ../build/libs:/usr/local/tomcat/webapps
+#      - ../:/tests
+#    networks:
+#      - postgres
 
   pgadmin:
     container_name: pgadmin_container
@@ -70,9 +43,13 @@ services:
   task_app:
     container_name: task_app
     restart: always
-    build: ../
+    build:
+      context: ..
+      dockerfile: Dockerfile
     volumes:
       - ../:/tests
+    ports:
+      - "7777:8080"
     networks:
       - postgres
 
