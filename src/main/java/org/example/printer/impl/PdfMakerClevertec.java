@@ -12,6 +12,8 @@ import lombok.SneakyThrows;
 import org.example.dao.pojo.Customer;
 import org.example.printer.DockMaker;
 import org.example.printer.impl.pageivent.MyPageEvents;
+import org.springframework.stereotype.Component;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -27,6 +29,7 @@ import java.util.Set;
 
 import static org.example.helper.PathVerify.getPathForSaveDoc;
 
+@Component
 public class PdfMakerClevertec implements DockMaker<Customer> {
 
     private static final String EXTENSION_FOR_SAVE = ".pdf";

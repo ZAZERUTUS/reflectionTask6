@@ -6,13 +6,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
+import org.example.config.ApplicationContextLocal;
 import org.example.dao.pojo.Customer;
 import org.example.printer.DockMaker;
-import org.example.printer.TypePrinter;
+import org.example.printer.impl.PdfMakerClevertec;
+import org.example.service.DTOService;
 import org.example.service.ServiceImpl;
+import org.springframework.context.ApplicationContext;
+
 import java.io.IOException;
 
-import static org.example.printer.PrinterFactory.createDockMakerByType;
 import static org.example.servelet.HelperCustomerServelet.parseCustomer;
 import static org.example.servelet.HelperCustomerServelet.serErrorResponse;
 import static org.example.servelet.HelperCustomerServelet.setIncorrectUserDataResponse;
@@ -20,7 +24,9 @@ import static org.example.servelet.HelperCustomerServelet.setIncorrectUserDataRe
 
 @WebServlet(name = "CrudCustomer", value = "/customer")
 public class ServCrudCustomer extends HttpServlet {
-    ServiceImpl service = new ServiceImpl();
+
+    ApplicationContext applicationContext;
+    DTOService<Customer> service;
     DockMaker<Customer> pdfMaker;
 
     HelperCustomerServelet helperCustomerServelet;
@@ -29,13 +35,17 @@ public class ServCrudCustomer extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        pdfMaker = createDockMakerByType(TypePrinter.PDF);
+        applicationContext = ApplicationContextLocal.getApplicationContext();
+        service = applicationContext.getBean(ServiceImpl.class);
+
+        pdfMaker = applicationContext.getBean(PdfMakerClevertec.class);
         pdfMaker.setCustomPathForSave("/");
         helperCustomerServelet = new HelperCustomerServelet(pdfMaker);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @SneakyThrows
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("id");
         if (id == null) {
             serErrorResponse("Please send \"id\" user for get in path(URL)", "2333333", response);
@@ -51,7 +61,8 @@ public class ServCrudCustomer extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @SneakyThrows
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         Customer customer = parseCustomer(request, response);
 
         try {
@@ -68,7 +79,8 @@ public class ServCrudCustomer extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @SneakyThrows
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("id");
         if (id == null) {
             serErrorResponse("Please send \"id\" user for delete in path(URL)", "44444211", response);
@@ -81,12 +93,12 @@ public class ServCrudCustomer extends HttpServlet {
             helperCustomerServelet.setPdfInResponse(customer, response, "Delete customer");
         } else {
             serErrorResponse("Not found user with id - " + id, "1111111", response);
-
         }
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @SneakyThrows
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) {
         Customer customer = parseCustomer(request, response);
 
         try {

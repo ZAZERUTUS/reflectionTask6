@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.dao.pojo.Customer;
 import org.example.validator.CustomerValidator;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 import static org.example.dao.CRUDCustomer.addCustomer;
@@ -11,7 +13,7 @@ import static org.example.dao.CRUDCustomer.getAllCustomersByPages;
 import static org.example.dao.CRUDCustomer.getCustomerById;
 import static org.example.dao.CRUDCustomer.updateCustomer;
 
-
+@Component
 public class ServiceImpl implements DTOService<Customer> {
 
     private final CustomerValidator validator = new CustomerValidator();
