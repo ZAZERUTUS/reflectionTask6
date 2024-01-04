@@ -2,6 +2,8 @@ package org.example.dbconnect;
 
 import lombok.SneakyThrows;
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,6 +32,10 @@ public class DbConnector {
     @SneakyThrows
     public static Connection getDBConnector() {
         closeDbConnection();
+
+        DriverManager.registerDriver((Driver)
+                Class.forName("org.postgresql.Driver").newInstance());
+
         connection = java.sql.DriverManager.getConnection("jdbc:postgresql://" +
                         getInstanceConfig().getConfig().getHostDb() + ":" +
                         getInstanceConfig().getConfig().getPortDb() + "/" +

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class CacheLRUTest {
 
     @Test
-    void getExistingKey_shouldReturnCachedValue() {
+    public void getExistingKey_shouldReturnCachedValue() {
         //Given
         CacheLRU<String, String> cache = new CacheLRU<>(2);
         cache.put("key1", "value1");
@@ -23,7 +23,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void getOldKey_shouldReturnNull() {
+    public void getOldKey_shouldReturnNull() {
         //Given
         CacheLRU<String, String> cache = new CacheLRU<>(2);
         cache.put("key1", "value1");
@@ -38,7 +38,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void putNewItem_shouldAddToCache() {
+    public void putNewItem_shouldAddToCache() {
         //Given
         CacheLRU<String, String> cache = new CacheLRU<>(2);
         cache.put("key1", "value1");
@@ -51,7 +51,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void putNewItemOverCapacity_shouldEvictLFUItem() {
+    public void putNewItemOverCapacity_shouldEvictLFUItem() {
         //Given
         int expectedCap = 2;
         CacheLRU<String, String> cache = new CacheLRU<>(2);
@@ -67,7 +67,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void remove_shouldReduceCache() {
+    public void remove_shouldReduceCache() {
         //Given
         int expectedCap = 1;
         CacheLRU<String, String> cache = new CacheLRU<>(2);
@@ -83,7 +83,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void remove_shouldRemoveFromCache() {
+    public void remove_shouldRemoveFromCache() {
         //Given
         String expectedCap = null;
         CacheLRU<String, String> cache = new CacheLRU<>(2);
@@ -99,7 +99,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void clear_shouldClearCache() {
+    public void clear_shouldClearCache() {
         //Given
         CacheLRU<String, String> cache = new CacheLRU<>(2);
         cache.put("key1", "value1");
@@ -114,7 +114,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void size_shouldReturnCurrentCacheSize() {
+    public void size_shouldReturnCurrentCacheSize() {
         //Given
         CacheLRU<String, String> cache = new CacheLRU<>(2);
 
@@ -127,7 +127,7 @@ class CacheLRUTest {
     }
 
     @Test
-    void size_shouldReturnCurrentCacheSizeIfAddMoreCapacity() {
+    public void size_shouldReturnCurrentCacheSizeIfAddMoreCapacity() {
         //Given
         CacheLRU<String, String> cache = new CacheLRU<>(2);
 

@@ -1,0 +1,46 @@
+FROM postgres:13.3
+
+USER root
+
+RUN apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
+RUN echo "admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
+
+USER postgres
+
+ENV POSTGRES_DB="test"
+ENV POSTGRES_USER="admin"
+ENV POSTGRES_PASSWORD="admin"
+ENV PGDATA="/var/lib/postgresql/data/pgdata"
+ENV POSTGRES_MAX_CONNECTIONS="50"
+ENV POSTGRES_SHARED_BUFFERS="1GB"
+ENV POSTGRES_EFFECTIVE_CACHE_SIZE="4GB"
+ENV POSTGRES_WORK_MEM="16MB"
+ENV POSTGRES_MAINTENANCE_WORK_MEM="512MB"
+ENV POSTGRES_RANDOM_PAGE_COST="1.1"
+ENV POSTGRES_TEMP_FILE_LIMIT="10GB"
+ENV POSTGRES_LOG_MIN_DURATION_STATEMENT="200ms"
+ENV POSTGRES_IDLE_IN_TRANSACTION_SESSION_TIMEOUT="10s"
+ENV POSTGRES_LOCK_TIMEOUT="1s"
+ENV POSTGRES_STATEMENT_TIMEOUT="60s"
+ENV POSTGRES_SHARED_PRELOAD_LIBRARIES="pg_stat_statements"
+ENV POSTGRES_PG_STAT_STATEMENTS_MAX="10000"
+ENV POSTGRES_PG_STAT_STATEMENTS_TRACK="all"
+
+COPY configInitDb.sh /configInitDb.sh
+COPY config.yml /config.yml
+COPY dockerPG/initDbScr/scr.sql /docker-entrypoint-initdb.d/scr.sql
+
+USER root
+RUN chmod 777 /docker-entrypoint-initdb.d/
+RUN bash /configInitDb.sh
+
+EXPOSE 5432
+
+USER postgres
+
+#ENTRYPOINT bash -c '. /etc/environment && sdk use java 17.0.7-amzn && gradle build && java -classpath /tests/libs/postgresql-42.6.0.jar:/tests/build/libs/consoleApp-1.0-SNAPSHOT.jar org.example.Main'
+#CMD ping 127.0.0.1
+
+#sudo docker pull alpine
+#sudo docker build -t test .
+#docker run -p 32999:32999 --rm -v ./:/tests -it test sh
